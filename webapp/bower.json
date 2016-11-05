@@ -1,0 +1,20 @@
+{
+  "name": "webapp",
+  "description": "ReactJS project repo",
+  "main": "webpack.config.js",
+  "authors": [
+    "Son Thai"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}
