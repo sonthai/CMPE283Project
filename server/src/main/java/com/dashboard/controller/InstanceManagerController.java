@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class InstanceManagerController {
@@ -20,8 +21,8 @@ public class InstanceManagerController {
     @Autowired
     InstanceManagerServices instanceManagerServices;
 
-    @RequestMapping(method = RequestMethod.POST, value="/instance/reserve", consumes = "application/json")
-    public ResponseMessage reserve(@RequestBody HashMap<String, String> data) {
+    @RequestMapping(method = RequestMethod.POST, value="/instance/reserve")
+    public ResponseMessage reserve(@RequestBody HashMap<String, Object> data) {
         log.info("Instance reserve API is called");
         ResponseMessage response = new ResponseMessage();
 
@@ -38,6 +39,22 @@ public class InstanceManagerController {
         ResponseMessage response = new ResponseMessage();
 
         int responseCode =  instanceManagerServices.release(data);
+
+        response.setErrorCode(responseCode);
+
+        return response;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value="/instance/test")
+    public ResponseMessage test() {
+        log.info("Instance reserve API is called");
+        ResponseMessage response = new ResponseMessage();
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("id", 1);
+        data.put("userName", "sdthai");
+        data.put("imageType", "Ubuntu");
+
+        int responseCode =  instanceManagerServices.reserve(data);
 
         response.setErrorCode(responseCode);
 

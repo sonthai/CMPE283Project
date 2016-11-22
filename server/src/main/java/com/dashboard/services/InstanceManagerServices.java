@@ -13,8 +13,9 @@ public class InstanceManagerServices {
     @Autowired
     InstanceDaoImpl instanceDao;
 
-    public int reserve(Map<String, String> data) {
+    public int reserve(Map<String, Object> data) {
         int result = 0;
+        instanceDao.createInstance(data);
 
         return result;
     }

@@ -1,0 +1,11 @@
+com/dashboard/dao/InstanceDaoImpl.class
+com/dashboard/services/UserServices.class
+com/dashboard/controller/InstanceManagerController.class
+com/dashboard/controller/UserController.class
+com/dashboard/Application.class
+com/dashboard/dao/InstanceDaoImpl$1.class
+com/dashboard/domain/User.class
+com/dashboard/domain/Instance.class
+com/dashboard/domain/ResponseMessage.class
+com/dashboard/dao/InstanceDao.class
+com/dashboard/services/InstanceManagerServices.class
