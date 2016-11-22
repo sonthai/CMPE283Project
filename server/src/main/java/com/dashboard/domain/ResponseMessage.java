@@ -6,7 +6,7 @@ import java.util.Map;
 public class ResponseMessage {
 	private int errorCode;
 	private String responseMsg;
-	private List<Map<String, Object>> data;
+	private Map<String, Object> data;
 
 
 	public int getErrorCode() {
@@ -25,11 +25,11 @@ public class ResponseMessage {
 		this.responseMsg = responseMsg;
 	}
 
-	public List<Map<String, Object>> getData() {
+	public Map<String, Object> getData() {
 		return data;
 	}
 
-	public void setData(List<Map<String, Object>> data) {
+	public void setData(Map<String, Object> data) {
 		this.data = data;
 	}
 }

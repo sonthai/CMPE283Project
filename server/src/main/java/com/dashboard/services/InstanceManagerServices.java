@@ -1,10 +1,12 @@
 package com.dashboard.services;
 
 import com.dashboard.dao.InstanceDaoImpl;
+import com.dashboard.domain.Instance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Map;
 
 public class InstanceManagerServices {
@@ -24,5 +26,9 @@ public class InstanceManagerServices {
         int result = 0;
 
         return result;
+    }
+
+    public List<Instance> getInstanceList(String userName) {
+        return instanceDao.getAllInstances(userName);
     }
 }
