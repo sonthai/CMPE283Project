@@ -1,0 +1,43 @@
+.SplitPane {
+    width: 100%;
+    height: 100%;
+    margin-top: 150px;
+}
+
+.SplitPane-left {
+    float:left;
+    width: 20%;
+    height: 100%;
+}
+
+SplitPane-right {
+    float: left;
+    width: 80%;
+    height: 100%;
+}
+
+.green {
+    background: green;
+}
+
+.TabGroup {
+    width: 100%;
+    height: 100%;
+    color: white;
+    text-align:center;
+    background: yellow;
+}
+
+.TabContent {
+    width: 100%;
+    height: 100%;
+}
+
+.nav-padding {
+    padding: 20px 20px;
+    border: solid white;
+}
+
+.body-content {
+    margin-left: 50px;
+}
