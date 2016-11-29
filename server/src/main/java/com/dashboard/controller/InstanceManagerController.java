@@ -7,6 +7,7 @@ import com.dashboard.services.UserServices;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -20,7 +21,7 @@ public class InstanceManagerController {
     @Autowired
     InstanceManagerServices instanceManagerServices;
 
-    @RequestMapping(method = RequestMethod.POST, value="/instance/reserve")
+    @RequestMapping(method = RequestMethod.POST, value="/instance/reserve", consumes = "application/json")
     public ResponseMessage reserve(@RequestBody HashMap<String, Object> data) {
         log.info("Instance reserve API is called");
         ResponseMessage response = new ResponseMessage();
