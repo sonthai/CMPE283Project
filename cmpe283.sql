@@ -13,12 +13,6 @@ CREATE TABLE IF NOT EXISTS `cmpe283`.`User` (
   `last_name` VARCHAR(45) NULL,
   `account` VARCHAR(45) NOT NULL,
   `pwd` VARCHAR(45) NOT NULL,
-  `role` SMALLINT(10) NULL,
-  `cloud_id` SMALLINT(10) UNSIGNED NOT NULL,
-  `cloud_cloud_id` TINYINT UNSIGNED NOT NULL,
-  `sensor_cloud_sensor_id` INT UNSIGNED NOT NULL,
-  `sensor_cloud_cloud_id` TINYINT UNSIGNED NOT NULL,
-  `user_sensor_user_id` SMALLINT UNSIGNED NOT NULL,
-  `user_sensor_sensor_id` INT UNSIGNED NOT NULL,
+  `email` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`user_id`))
 ENGINE = InnoDB
