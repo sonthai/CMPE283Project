@@ -4,6 +4,7 @@ import com.dashboard.domain.Instance;
 import com.dashboard.domain.ResponseMessage;
 import com.dashboard.services.InstanceManagerServices;
 import com.dashboard.services.UserServices;
+import com.dashboard.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,21 +27,31 @@ public class InstanceManagerController {
         log.info("Instance reserve API is called");
         ResponseMessage response = new ResponseMessage();
 
-        int responseCode =  instanceManagerServices.reserve(data);
+        int responseCode = instanceManagerServices.reserve(data);
 
         response.setErrorCode(responseCode);
+        if (responseCode == 0) {
+            response.setResponseMsg(Constants.INSTANCE_CREATED_SUCCESS);
+        } else {
+            response.setResponseMsg(Constants.INSTANCE_CREATED_FAIL);
+        }
 
         return response;
     }
 
     @RequestMapping(method = RequestMethod.POST, value="/instance/release", consumes = "application/json")
-    public ResponseMessage release(@RequestBody HashMap<String, String> data) {
+    public ResponseMessage release(@RequestBody HashMap<String, Object> data) {
         log.info("Instance release API is called");
         ResponseMessage response = new ResponseMessage();
 
         int responseCode =  instanceManagerServices.release(data);
 
         response.setErrorCode(responseCode);
+        if (responseCode == 0) {
+            response.setResponseMsg(Constants.INSTANCE_DELETED_SUCCESS);
+        } else {
+            response.setResponseMsg(Constants.INSTANCE_DELETED_FAIL);
+        }
 
         return response;
     }
@@ -62,7 +73,7 @@ public class InstanceManagerController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value="/instance/list")
-    public ResponseMessage getAllInstances(@RequestParam("userName") String userName) {
+    public ResponseMessage getAllInstances(@RequestParam(value = "userName", defaultValue = "") String userName) {
         log.info("Instance list API is called");
         ResponseMessage response = new ResponseMessage();
 

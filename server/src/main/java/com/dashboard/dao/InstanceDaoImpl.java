@@ -11,12 +11,9 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
 
 public class InstanceDaoImpl implements InstanceDao{
     @Autowired
@@ -32,15 +29,31 @@ public class InstanceDaoImpl implements InstanceDao{
         QueryObject query = new QueryObject();
         query.setOperation("INSERT");
         query.setTable("instance_manager");
-        List<String> values = Utils.flattenMap(map);
+        List<String> values = Utils.constructQuery(map.keySet(), null, false);
         query.setValues(values);
-        String sql = query.getQuery();//"Insert into instance_manager (id, userName, status, dateCreated, imageType) values (:id, :userName, :status, :dateCreated, :imageType)";
+        String sql = query.getQuery();
 
         namedParameterJdbcTemplate.update(sql, map);
     }
 
-    public void releaseInstance() {
+    public void releaseInstance(Map<String, Object> map) {
+        QueryObject query = new QueryObject();
+        query.setOperation("UPDATE");
+        query.setTable("instance_manager");
 
+        Set<String> fields = new HashSet<>();
+        fields.add("isActive");
+        List<String> values = Utils.constructQuery(fields, "=", false);
+        query.setValues(values);
+
+        Set<String> whereClauses = new HashSet<>();
+        whereClauses.add("uuid");
+        whereClauses.add("userName");
+        String where = Utils.constructQuery(whereClauses, "=", true).get(0);
+        query.setWhereClause(where);
+
+        String sql = query.getQuery();
+        namedParameterJdbcTemplate.update(sql, map);
     }
 
     @Override
@@ -49,9 +62,11 @@ public class InstanceDaoImpl implements InstanceDao{
         query.setOperation("SELECT");
         query.setQueryFields(new String[] {"*"});
         query.setTable("instance_manager");
-        String whereClause = "userName = :userName";
-        query.setWhereClause(whereClause);
-        String sql = query.getQuery();//"Select * from instance_manager where userName= :userName";
+        if (!userName.equals("")) {
+            String whereClause = "userName = :userName";
+            query.setWhereClause(whereClause);
+        }
+        String sql = query.getQuery();
         SqlParameterSource params = new MapSqlParameterSource("userName", userName);
         List<Instance> instanceList = namedParameterJdbcTemplate.query(sql, params, new InstanceMapper());
         return instanceList;
