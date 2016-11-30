@@ -1,7 +1,9 @@
 package com.dashboard.dao;
 
+import com.dashboard.database.QueryObject;
 import com.dashboard.domain.Instance;
 import com.dashboard.domain.InstanceMapper;
+import com.dashboard.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCallback;
@@ -9,11 +11,9 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
-import java.util.Date;
+import java.util.*;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
 
 public class InstanceDaoImpl implements InstanceDao{
     @Autowired
@@ -25,19 +25,48 @@ public class InstanceDaoImpl implements InstanceDao{
 
 
     public void createInstance(Map<String, Object> map) {
-        String sql = "Insert into instance_manager (id, userName, status, dateCreated, imageType) values (:id, :userName, :status, :dateCreated, :imageType)";
-        map.put("dateCreated", new Date());
-        map.put("status", 1);
+        map = Utils.setUpInstanceData(map);
+        QueryObject query = new QueryObject();
+        query.setOperation("INSERT");
+        query.setTable("instance_manager");
+        List<String> values = Utils.constructQuery(map.keySet(), null, false);
+        query.setValues(values);
+        String sql = query.getQuery();
+
         namedParameterJdbcTemplate.update(sql, map);
     }
 
-    public void releaseInstance() {
+    public void releaseInstance(Map<String, Object> map) {
+        QueryObject query = new QueryObject();
+        query.setOperation("UPDATE");
+        query.setTable("instance_manager");
 
+        Set<String> fields = new HashSet<>();
+        fields.add("isActive");
+        List<String> values = Utils.constructQuery(fields, "=", false);
+        query.setValues(values);
+
+        Set<String> whereClauses = new HashSet<>();
+        whereClauses.add("uuid");
+        whereClauses.add("userName");
+        String where = Utils.constructQuery(whereClauses, "=", true).get(0);
+        query.setWhereClause(where);
+
+        String sql = query.getQuery();
+        namedParameterJdbcTemplate.update(sql, map);
     }
 
     @Override
     public List<Instance> getAllInstances(String userName) {
-        String sql = "Select * from instance_manager where userName= :userName";
+        QueryObject query = new QueryObject();
+        query.setOperation("SELECT");
+        query.setQueryFields(new String[] {"*"});
+        query.setTable("instance_manager");
+        if (!userName.equals("")) {
+            String whereClause = "userName = :userName";
+            query.setWhereClause(whereClause);
+        }
+        String sql = query.getQuery();
         SqlParameterSource params = new MapSqlParameterSource("userName", userName);
         List<Instance> instanceList = namedParameterJdbcTemplate.query(sql, params, new InstanceMapper());
         return instanceList;

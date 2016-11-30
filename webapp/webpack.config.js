@@ -2,6 +2,8 @@ var path = require('path');
 var srcPath = path.join(__dirname, 'src');
 var buildPath = path.join(__dirname, 'dst');
 var bootstrap = path.join(__dirname, 'bower_components');
+var autoprefixer = require('autoprefixer');
+var precss =  require('precss')
 
 var config = {
     context: srcPath,
@@ -13,29 +15,28 @@ var config = {
     },
 
     devServer: {
-	inline: true,
-	port: 8090
+        inline: true,
+        port: 8090
     },
 
     module: {
-	loaders: [
-	    {
-		test: /\.jsx?$/,
-		exclude: /node_modules/,
-		loader: 'babel',
-		query: {
-		    presets: ['es2015', 'react']
-		}
+        loaders: [
+        {
+            test: /\.jsx?$/,
+            exclude: /node_modules/,
+            loader: 'babel',
+            query: {
+                presets: ['es2015', 'react']
+            }
 
-	    }, {
-		test: /\.scss$/,
-		loaders: ['style-loader', 'css-loader', 'postcss-loader']
-		
-	    }
-    	 ]
+        }, {
+                test: /\.css$/,
+                loaders: ['style-loader', 'css-loader', 'postcss-loader']
+            }
+        ]
     },
     postcss: function () {
-	return [autoprefixer, precss];
+	    return [autoprefixer, precss];
     }
 }
 

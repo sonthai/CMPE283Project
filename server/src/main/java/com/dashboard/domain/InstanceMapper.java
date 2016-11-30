@@ -10,12 +10,16 @@ public class InstanceMapper implements RowMapper {
     @Override
     public Instance mapRow(ResultSet rs, int rowNum) throws SQLException {
         Instance instance = new Instance();
-        instance.setId(rs.getInt("id"));
+        instance.setUuid(rs.getInt("uuid"));
         instance.setUserName(rs.getString("userName"));
-        instance.setImageType(rs.getString("imageType"));
-        instance.setStatus(rs.getInt("status"));
+        instance.setImage(rs.getString("image"));
+        instance.setIsActive(rs.getInt("isActive"));
         instance.setDateCreated(rs.getDate("dateCreated"));;
         instance.setDateReleased(rs.getDate("dateReleased"));
+        instance.setAppName(rs.getString("appName"));
+        instance.setMemory(rs.getInt("memory"));
+        instance.setCpu(rs.getInt("cpu"));
+        instance.setFlavor(rs.getString("flavor"));
         return instance;
     }
 }

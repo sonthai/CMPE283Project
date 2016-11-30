@@ -6,20 +6,16 @@ package com.dashboard.domain;
 import java.sql.Date;
 public class Instance {
 
-    private int id;
+    private int uuid;
     private String userName;
-    private String imageType;
-    private int status;
+    private String image;
+    private String flavor;
+    private String appName;
+    private int memory;
+    private int cpu;
+    private int isActive;
     private Date dateCreated;
     private Date dateReleased;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getUserName() {
         return userName;
@@ -29,21 +25,6 @@ public class Instance {
         this.userName = userName;
     }
 
-    public String getImageType() {
-        return imageType;
-    }
-
-    public void setImageType(String imageType) {
-        this.imageType = imageType;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
 
     public Date getDateCreated() {
         return dateCreated;
@@ -59,5 +40,61 @@ public class Instance {
 
     public void setDateReleased(Date dateReleased) {
         this.dateReleased = dateReleased;
+    }
+
+    public int getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(int uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getFlavor() {
+        return flavor;
+    }
+
+    public void setFlavor(String flavor) {
+        this.flavor = flavor;
+    }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
+
+    public int getMemory() {
+        return memory;
+    }
+
+    public void setMemory(int memory) {
+        this.memory = memory;
+    }
+
+    public int getCpu() {
+        return cpu;
+    }
+
+    public void setCpu(int cpu) {
+        this.cpu = cpu;
+    }
+
+    public int getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(int isActive) {
+        this.isActive = isActive;
     }
 }
