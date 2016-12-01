@@ -25,9 +25,14 @@ public class UserController {
 		log.info("Login API is called");
 		ResponseMessage response = new ResponseMessage();
 
-		int responseCode =  userServices.login(data);
+		boolean responseCode =  userServices.login(data);
 
-		response.setErrorCode(responseCode);
+		if(responseCode) {
+			response.setErrorCode(0);
+		}
+		else {
+			response.setErrorCode(1);
+		}
 
 		return response;
 	}
