@@ -61,7 +61,20 @@ public class UserController {
 		return response;
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value="/get-token", produces = "application/json")
+	public ResponseMessage getTokenAPI() {
+		log.info("getTokenAPI API is called");
 
+		KeystoneController.getToken();
+
+		String token = KeystoneController.getToken();
+		ResponseMessage response = new ResponseMessage();
+		response.setResponseMsg(token);
+		response.setErrorCode(0);
+		response.setData(null);
+
+		return response;
+	}
 
 
 }

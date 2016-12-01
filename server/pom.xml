@@ -52,6 +52,18 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.pacesys</groupId>
+			<artifactId>openstack4j</artifactId>
+			<version>3.0.2</version>
+			<classifier>withdeps</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.pacesys</groupId>
+			<artifactId>openstack4j-core</artifactId>
+			<version>3.0.2</version>
+		</dependency>
+
 
 	</dependencies>
 
