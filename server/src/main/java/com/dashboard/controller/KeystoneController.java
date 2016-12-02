@@ -1,6 +1,7 @@
 package com.dashboard.controller;
 
 import org.openstack4j.api.OSClient.OSClientV3;
+import org.openstack4j.model.identity.v3.User;
 import org.openstack4j.openstack.OSFactory;
 import org.openstack4j.model.common.Identifier;
 
@@ -34,7 +35,6 @@ public class KeystoneController {
                 .endpoint("http://127.0.0.1:5000/v3")
                 .credentials("admin","admin_user_secret", Identifier.byName("default"))
                 .authenticate();
-
-        return os.getToken().toString();
+        return os.getToken().getId();
     }
 }
