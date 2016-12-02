@@ -14,6 +14,8 @@ import org.openstack4j.model.common.Identifier;
 public class KeystoneController {
     private static KeystoneController instance = null;
 
+    public static final String ENDPOINT = "http://10.0.0.11:5000/v3";
+
     protected KeystoneController() {
 
     }
@@ -31,9 +33,11 @@ public class KeystoneController {
 
     public static String getToken() {
 
+        Identifier projectIdentifier = Identifier.byId("611e8923975e4c35a3e575d34d92f27f");
         OSClientV3 os = OSFactory.builderV3()
-                .endpoint("http://127.0.0.1:5000/v3")
-                .credentials("admin","admin_user_secret", Identifier.byName("default"))
+                .endpoint(ENDPOINT)
+                .credentials("admin", "admin_user_secret", Identifier.byName("default"))
+                .scopeToProject(projectIdentifier)
                 .authenticate();
         return os.getToken().getId();
     }
