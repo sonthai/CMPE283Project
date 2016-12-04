@@ -2,6 +2,8 @@ package com.dashboard.services;
 
 import com.dashboard.dao.InstanceDaoImpl;
 import com.dashboard.domain.Instance;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +19,24 @@ public class InstanceManagerServices {
     InstanceDaoImpl instanceDao;
 
     public int reserve(Map<String, Object> data) {
-        int result = 0;
+        int errorCode = 0; // Success
 
         // Add the code to interact with open stack API to create instance
+        String serverId = null;
+        try {
+            JSONObject response = new JSONObject(OpenStackService.reserve());
+            serverId = response.getString("uuid");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            errorCode = 1; // Error
+        }
 
-        if (result == 0) {
-            // Test purpose
-            int uuid = (int) (Math.random() * 9999 + 1);
-            data.put("uuid", uuid);
+        if (errorCode == 0) {
+            data.put("uuid", serverId);
             instanceDao.createInstance(data);
         }
 
-        return result;
+        return errorCode;
     }
 
     public int release(Map<String, Object> data) {

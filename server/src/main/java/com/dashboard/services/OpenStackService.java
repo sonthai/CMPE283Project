@@ -104,12 +104,7 @@ public class OpenStackService {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            return new JSONObject().put("error", "Instance creation failed. Please check your setup and try again").toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return "{\"error\": \"Instance creation failed. Please check your setup and try again\"}";
     }
 
     public static String release(String serverId) {
