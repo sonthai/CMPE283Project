@@ -39,6 +39,14 @@ public class InstanceManagerServices {
         return errorCode;
     }
 
+    public int resume(Map<String, Object> data) {
+        return 0;
+    }
+
+    public int suspend(Map<String, Object> data) {
+        return 0;
+    }
+
     public int release(Map<String, Object> data) {
         int result = 0;
 

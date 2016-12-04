@@ -93,8 +93,6 @@ public class OpenStackService {
                 JSONObject responseObject = new JSONObject(response2).getJSONObject("server");
                 return new JSONObject().put("uuid", serverId).toString();
             }
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (ProtocolException e) {
@@ -108,6 +106,14 @@ public class OpenStackService {
     }
 
     public static String release(String serverId) {
+        return null;
+    }
+
+    public static void start(String serverId) {
+
+    }
+
+    public static void stop(String serverId) {
 
     }
 

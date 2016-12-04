@@ -56,6 +56,40 @@ public class InstanceManagerController {
         return response;
     }
 
+    @RequestMapping(method = RequestMethod.POST, value="/instance/resume", consumes = "application/json")
+    public ResponseMessage resume(@RequestBody HashMap<String, Object> data) {
+        log.info("Instance suspend API is called");
+        ResponseMessage response = new ResponseMessage();
+
+        int responseCode =  instanceManagerServices.resume(data);
+
+        response.setErrorCode(responseCode);
+        if (responseCode == 0) {
+            response.setResponseMsg(Constants.INSTANCE_RESUME_SUCCESS);
+        } else {
+            response.setResponseMsg(Constants.INSTANCE_RESUME_FAIL);
+        }
+
+        return response;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value="/instance/suspend", consumes = "application/json")
+    public ResponseMessage suspend(@RequestBody HashMap<String, Object> data) {
+        log.info("Instance suspend API is called");
+        ResponseMessage response = new ResponseMessage();
+
+        int responseCode =  instanceManagerServices.suspend(data);
+
+        response.setErrorCode(responseCode);
+        if (responseCode == 0) {
+            response.setResponseMsg(Constants.INSTANCE_SUSPEND_SUCCESS);
+        } else {
+            response.setResponseMsg(Constants.INSTANCE_SUSPEND_FAIL);
+        }
+
+        return response;
+    }
+
     @RequestMapping(method = RequestMethod.POST, value="/instance/test")
     public ResponseMessage test() {
         log.info("Instance reserve API is called");
