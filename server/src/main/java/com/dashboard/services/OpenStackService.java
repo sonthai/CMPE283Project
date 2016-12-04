@@ -3,6 +3,7 @@ package com.dashboard.services;
 import com.dashboard.controller.KeystoneController;
 import com.jcabi.ssh.SSHByPassword;
 import com.jcabi.ssh.Shell;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,7 +28,6 @@ public class OpenStackService {
     public static final String OPENSTACK_IP = "10.0.0.11";
     public static final String PROJECT_ID = "611e8923975e4c35a3e575d34d92f27f";
     public static final String NOVA_URL = "http://" + OPENSTACK_IP + ":8774/v2.1/" + PROJECT_ID;
-    public static final String SSH_COMMAND = "sshpass -p 'osbash' ssh osbash@"+OPENSTACK_IP+" '";
     public static final String AUTH_COMMAND = " --os-username admin " +
             "--os-auth-url http://controller:5000/v3 " +
             "--os-project-id " + PROJECT_ID + " " +
@@ -109,7 +109,32 @@ public class OpenStackService {
     }
 
     public static String release(String serverId) {
-        return null;
+        // Get Keystone token
+        String token = KeystoneController.getToken();
+        HttpURLConnection connection = null;
+        try {
+            // Ping server status, return error if server missing.
+            URL deleteUrl = new URL(NOVA_URL + "/servers/" + serverId);
+            connection = (HttpURLConnection) deleteUrl.openConnection();
+            connection.setRequestMethod("DELETE");
+            connection.setRequestProperty("X-Auth-Token", token);
+            connection.setUseCaches(false);
+            connection.setDoOutput(true);
+
+            String checkResponse = getResponse(connection);
+            if (checkResponse == null || checkResponse.isEmpty()) { // Success
+                return new JSONObject().put("uuid", serverId).toString();
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return "{\"error\": \"Instance deletion failed. Please check your setup and try again\"}";
     }
 
     public static void listServers() {
