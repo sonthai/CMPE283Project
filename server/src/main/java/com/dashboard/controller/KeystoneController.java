@@ -1,5 +1,6 @@
 package com.dashboard.controller;
 
+import com.dashboard.services.OpenStackService;
 import org.openstack4j.api.OSClient.OSClientV3;
 import org.openstack4j.model.identity.v3.User;
 import org.openstack4j.openstack.OSFactory;
@@ -14,7 +15,7 @@ import org.openstack4j.model.common.Identifier;
 public class KeystoneController {
     private static KeystoneController instance = null;
 
-    public static final String ENDPOINT = "http://10.0.0.11:5000/v3";
+    public static final String ENDPOINT = "http://" + OpenStackService.OPENSTACK_IP + ":5000/v3";
 
     protected KeystoneController() {
 

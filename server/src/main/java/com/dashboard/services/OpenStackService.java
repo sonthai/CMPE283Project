@@ -1,15 +1,10 @@
 package com.dashboard.services;
 
 import com.dashboard.controller.KeystoneController;
+import com.jcabi.ssh.SSHByPassword;
+import com.jcabi.ssh.Shell;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.openstack4j.api.OSClient.OSClientV3;
-import org.openstack4j.api.types.ServiceType;
-import org.openstack4j.model.common.resolvers.ServiceVersionResolver;
-import org.openstack4j.model.compute.Flavor;
-import org.openstack4j.openstack.OSFactory;
-import org.openstack4j.model.common.Identifier;
-import org.openstack4j.model.identity.v3.Service;
 
 
 import java.io.BufferedReader;
@@ -21,8 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.util.List;
-import java.util.SortedSet;
+import java.net.UnknownHostException;
 import java.util.UUID;
 
 /**
@@ -30,19 +24,28 @@ import java.util.UUID;
  */
 public class OpenStackService {
 
+    public static final String OPENSTACK_IP = "10.0.0.11";
     public static final String PROJECT_ID = "611e8923975e4c35a3e575d34d92f27f";
-    public static final String NOVA_URL = "http://10.0.0.11:8774/v2.1/"+PROJECT_ID;
+    public static final String NOVA_URL = "http://" + OPENSTACK_IP + ":8774/v2.1/" + PROJECT_ID;
+    public static final String SSH_COMMAND = "sshpass -p 'osbash' ssh osbash@"+OPENSTACK_IP+" '";
+    public static final String AUTH_COMMAND = " --os-username admin " +
+            "--os-auth-url http://controller:5000/v3 " +
+            "--os-project-id " + PROJECT_ID + " " +
+            "--os-project-name admin " +
+            "--os-user-domain-name default " +
+            "--os-password admin_user_secret";
 
     /*
      * We are forced to hardcode an image ID, because our setup only supports small images
      * due to limited memory. This is why we are using a Cirros image.
      */
     public static final String IMAGE_UUID = "84a9c0cc-107a-427d-b335-0a156300220b";
+    public static final String FLAVOR_TINY = "1";
 
     // For Testing
-    //public static void main(String[] args) throws IOException {
-    //    reserve();
-    //}
+    public static void main(String[] args) throws IOException {
+        listServers();
+    }
 
     public static String reserve() {
         // Get Keystone token
@@ -63,7 +66,7 @@ public class OpenStackService {
                    "    \"server\" : {\n" +
                    "        \"name\" : \""+ UUID.randomUUID().toString()+"\",\n" +
                    "        \"imageRef\" : \""+IMAGE_UUID+"\",\n" +
-                   "        \"flavorRef\" : \"1\",\n" +
+                   "        \"flavorRef\" : \""+FLAVOR_TINY+"\",\n" +
                    "        \"networks\": [{\n" +
                    "    \t\t\"uuid\":\"8a515fb6-eeb4-424f-be7d-cf987060820c\"\n" +
                    "\t\t}]\n" +
@@ -88,9 +91,9 @@ public class OpenStackService {
             connection.setUseCaches(false);
             connection.setDoOutput(true);
 
-            String response2 = getResponse(connection);
-            if (response2 != null) {
-                JSONObject responseObject = new JSONObject(response2).getJSONObject("server");
+            String checkResponse = getResponse(connection);
+            if (checkResponse != null) {
+                JSONObject responseObject = new JSONObject(checkResponse).getJSONObject("server");
                 return new JSONObject().put("uuid", serverId).toString();
             }
         } catch (MalformedURLException e) {
@@ -109,12 +112,43 @@ public class OpenStackService {
         return null;
     }
 
-    public static void start(String serverId) {
-
+    public static void listServers() {
+        String command = "openstack server list " + AUTH_COMMAND;
+        try {
+            Shell shell = new SSHByPassword(OPENSTACK_IP, 22, "osbash", "osbash");
+            String stdout = new Shell.Plain(shell).exec(command);
+            System.out.println(stdout);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static void stop(String serverId) {
+    public static void resume(String serverId) {
+        String command = "openstack server resume " + serverId + AUTH_COMMAND;
+        try {
+            Shell shell = new SSHByPassword(OPENSTACK_IP, 22, "osbash", "osbash");
+            String stdout = new Shell.Plain(shell).exec(command);
+            System.out.println(stdout);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public static void suspend(String serverId) {
+        String command = "openstack server suspend " + serverId + AUTH_COMMAND;
+        try {
+            Shell shell = new SSHByPassword(OPENSTACK_IP, 22, "osbash", "osbash");
+            String stdout = new Shell.Plain(shell).exec(command);
+            System.out.println(stdout);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static String getResponse(HttpURLConnection connection) {

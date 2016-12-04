@@ -40,10 +40,12 @@ public class InstanceManagerServices {
     }
 
     public int resume(Map<String, Object> data) {
+        OpenStackService.resume((String) data.get("uuid"));
         return 0;
     }
 
     public int suspend(Map<String, Object> data) {
+        OpenStackService.suspend((String) data.get("uuid"));
         return 0;
     }
 
