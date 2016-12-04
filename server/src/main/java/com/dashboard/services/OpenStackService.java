@@ -33,64 +33,20 @@ public class OpenStackService {
     public static final String PROJECT_ID = "611e8923975e4c35a3e575d34d92f27f";
     public static final String NOVA_URL = "http://10.0.0.11:8774/v2.1/"+PROJECT_ID;
 
+    /*
+     * We are forced to hardcode an image ID, because our setup only supports small images
+     * due to limited memory. This is why we are using a Cirros image.
+     */
+    public static final String IMAGE_UUID = "84a9c0cc-107a-427d-b335-0a156300220b";
 
+    // For Testing
     //public static void main(String[] args) throws IOException {
     //    reserve();
     //}
 
-    public static void authenticate2() {
-        //Identifier domainIdentifier = Identifier.byId("d8e9291eee684686b276cb1abc31e683");
-        /*Identifier projectIdentifier = Identifier.byId("611e8923975e4c35a3e575d34d92f27f");
-
-        OSClientV3 os = OSFactory.builderV3()
-                .endpoint("http://10.0.0.11:5000/v3")
-                .credentials("admin","admin_user_secret", domainIdentifier)
-                .authenticate();
-
-        OSClientV3 os = OSFactory.builderV3()
-                .endpoint("http://10.0.0.11:5000/v3")
-                .credentials("admin", "admin_user_secret", Identifier.byName("default"))
-                .scopeToProject(projectIdentifier)
-                .authenticate();
-
-        os.getToken().getCatalog()*/
-        //os.getToken();
-
-        // define custom ServiceVersionResolver
-        /*final ServiceVersionResolver resolver = new ServiceVersionResolver() {
-            @Override
-            public Service resolve(ServiceType type, SortedSet<? extends Service> services) {
-                // resolver logic; possibly ext. default logic
-                switch (type) {
-                    case COMPUTE:
-                        return new Service() {
-                        }"http://10.0.0.11:8774/v2.1/611e8923975e4c35a3e575d34d92f27f/";
-                }
-                return endpoint;
-            }
-        };*/
-
-// apply resolver to client
-        //OSClient.withConfig(Config.newConfig().withResolver(resolver))
-
-
-        //Flavor flavor2 = os.compute().flavors().get("1");
-        //System.out.println("**********"+flavor2.toString());
-
-
-        /*List<? extends Flavor> flavors = os.compute().flavors().list();
-        for (Flavor flavor : flavors) {
-            System.out.println(flavor.toString());
-
-        }*/
-
-    }
-
     public static String reserve() {
         // Get Keystone token
         String token = KeystoneController.getToken();
-        System.out.print("token*******"+token);
-
         HttpURLConnection connection = null;
         try {
             // Run reservation request, return error if any
@@ -106,7 +62,7 @@ public class OpenStackService {
             String body = "{\n" +
                    "    \"server\" : {\n" +
                    "        \"name\" : \""+ UUID.randomUUID().toString()+"\",\n" +
-                   "        \"imageRef\" : \"84a9c0cc-107a-427d-b335-0a156300220b\",\n" +
+                   "        \"imageRef\" : \""+IMAGE_UUID+"\",\n" +
                    "        \"flavorRef\" : \"1\",\n" +
                    "        \"networks\": [{\n" +
                    "    \t\t\"uuid\":\"8a515fb6-eeb4-424f-be7d-cf987060820c\"\n" +
@@ -118,28 +74,25 @@ public class OpenStackService {
             writer.write(body);
             writer.close();
 
-            //Get Response
-            InputStream is = connection.getInputStream();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-            StringBuilder response = new StringBuilder();
-            String line;
-            while ((line = rd.readLine()) != null) {
-                response.append(line);
-                response.append('\r');
-            }
-            rd.close();
-
-            JSONObject responseJson = new JSONObject(response.toString());
+            // Get Response
+            String response = getResponse(connection);
+            JSONObject responseJson = new JSONObject(response);
             JSONObject server = responseJson.getJSONObject("server");
             String serverId = server.getString("id");
 
+            // Ping server status, return error if server missing.
+            URL checkUrl = new URL(NOVA_URL + "/servers/" + serverId);
+            connection = (HttpURLConnection) checkUrl.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("X-Auth-Token", token);
+            connection.setUseCaches(false);
+            connection.setDoOutput(true);
 
-            // Ping server status
-
-
-            return new JSONObject().put("uuid", serverId).toString();
-
-            // Run query for instance, return error if any
+            String response2 = getResponse(connection);
+            if (response2 != null) {
+                JSONObject responseObject = new JSONObject(response2).getJSONObject("server");
+                return new JSONObject().put("uuid", serverId).toString();
+            }
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (MalformedURLException e) {
@@ -157,6 +110,28 @@ public class OpenStackService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static String release(String serverId) {
+
+    }
+
+    private static String getResponse(HttpURLConnection connection) {
+        try {
+            InputStream is = connection.getInputStream();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = rd.readLine()) != null) {
+                response.append(line);
+                response.append('\r');
+            }
+            rd.close();
+            return response.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
