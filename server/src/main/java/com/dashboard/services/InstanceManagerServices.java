@@ -19,7 +19,7 @@ public class InstanceManagerServices {
     InstanceDaoImpl instanceDao;
 
     public int reserve(Map<String, Object> data) {
-        int errorCode = 0; // Success
+        int errorCode = 0;
 
         // Add the code to interact with open stack API to create instance
         String serverId = null;
@@ -40,24 +40,31 @@ public class InstanceManagerServices {
     }
 
     public int resume(Map<String, Object> data) {
+        OpenStackService.resume((String) data.get("uuid"));
         return 0;
     }
 
     public int suspend(Map<String, Object> data) {
+        OpenStackService.suspend((String) data.get("uuid"));
         return 0;
     }
 
     public int release(Map<String, Object> data) {
-        int result = 0;
+        int errorCode = 0;
 
-        // Add the code to interact with open stack API to release instance
-        String uuid = (String) data.get("uuid");
+        try {
+            JSONObject response = new JSONObject(OpenStackService.release((String) data.get("uuid")));
+            response.getString("uuid");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            errorCode = 1; // Error
+        }
 
-        if (result == 0) {
-            data.put("isActive", 0);
+        if (errorCode == 0) { // Success
+            data.put("status", "deleted");
             instanceDao.releaseInstance(data);
         }
-        return result;
+        return errorCode;
     }
 
     public List<Instance> getInstanceList(String userName) {

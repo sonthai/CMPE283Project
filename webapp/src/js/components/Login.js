@@ -30,7 +30,7 @@ export default class Login extends React.Component {
         const userName = event.target.elements[0].value;
         const repo = event.target.elements[1].value;
         const path = `/dashboard`;
-        alert(path);
+        //alert(path);
         browserHistory.push(path);
     }
     render() {
