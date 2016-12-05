@@ -42,7 +42,7 @@ public class InstanceDaoImpl implements InstanceDao{
         query.setTable("instance_manager");
 
         Set<String> fields = new HashSet<>();
-        fields.add("isActive");
+        fields.add("status");
         List<String> values = Utils.constructQuery(fields, "=", false);
         query.setValues(values);
 
@@ -58,6 +58,7 @@ public class InstanceDaoImpl implements InstanceDao{
 
     @Override
     public List<Instance> getAllInstances(String userName) {
+        List<Instance> instanceList = new ArrayList<>();
         QueryObject query = new QueryObject();
         query.setOperation("SELECT");
         query.setQueryFields(new String[] {"*"});
@@ -65,10 +66,13 @@ public class InstanceDaoImpl implements InstanceDao{
         if (!userName.equals("")) {
             String whereClause = "userName = :userName";
             query.setWhereClause(whereClause);
+            String sql = query.getQuery();
+            SqlParameterSource params = new MapSqlParameterSource("userName", userName);
+            instanceList = namedParameterJdbcTemplate.query(sql, params, new InstanceMapper());
+        } else {
+            String sql = query.getQuery();
+            instanceList = namedParameterJdbcTemplate.query(sql, new InstanceMapper());
         }
-        String sql = query.getQuery();
-        SqlParameterSource params = new MapSqlParameterSource("userName", userName);
-        List<Instance> instanceList = namedParameterJdbcTemplate.query(sql, params, new InstanceMapper());
         return instanceList;
     }
 }

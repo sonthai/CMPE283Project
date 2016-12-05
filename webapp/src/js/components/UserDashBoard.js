@@ -1,17 +1,32 @@
 import React from 'react';
 import { Link } from 'react-router';
 import DashBoard from './pages/DashBoard';
+import styles from './../styles/customUI.css'
 
 class UserDashBoard extends React.Component {
     render() {
         return (
-            <div>
-                <Link to="dashboard"><button disable="true" className="btn btn-success">DashBoard</button></Link>
-                <Link to="project"><button className="btn">Project</button></Link>
-                <Link to="profile"><button className="btn btn-success">Profile</button></Link>
-                <DashBoard />
-            </div>
+            <div className="skin-black">
+                <div className="wrapper row-offcanvas row-offcanvas-left">
+                    <aside className="left-side sidebar-offcanvas">
+                        <section className="sidebar">
+                            <ul className="sidebar-menu">
+                               <li>
+                                <Link to="dashboard">Dashboard</Link>
+                               </li>
+                               <li>
+                                <Link to="project">Project</Link>
+                               </li>
+                               <li>
+                                <Link to="project">Profile</Link>
+                               </li>
 
+                            </ul>
+                        </section>
+                    </aside>
+
+                 </div>
+            </div>
         );
     }
 }

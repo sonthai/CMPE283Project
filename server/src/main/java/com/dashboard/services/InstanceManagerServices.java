@@ -61,7 +61,7 @@ public class InstanceManagerServices {
         }
 
         if (errorCode == 0) { // Success
-            data.put("isActive", 0);
+            data.put("status", "deleted");
             instanceDao.releaseInstance(data);
         }
         return errorCode;

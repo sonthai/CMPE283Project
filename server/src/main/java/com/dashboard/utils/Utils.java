@@ -47,7 +47,7 @@ public class Utils {
     public static Map<String, Object> setUpInstanceData(Map<String, Object> map) {
         map.put("dateCreated", new Date());
         map.put("dateReleased", new Date());
-        map.put("isActive", 1);
+        map.put("status", "running");
 
         String flavor = (String) map.get("flavor");
         if (flavor.equalsIgnoreCase("tiny")) {
