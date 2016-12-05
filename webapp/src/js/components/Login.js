@@ -35,17 +35,21 @@ export default class Login extends React.Component {
     }
     render() {
         return (
-            <div>
-                <h2>Login</h2>
-                <form onSubmit={this.handleSubmit}>
-                    User name: <input type="text" placeholder="userName"/><br/>
-                    Password: <input type="text" placeholder="password"/><br/>
-                    <button className="btn btn-primary" type="submit">Go</button>
+            <div className="container page-form">
+                <form id="login-form" action="/auth/login" method="post">
+                    <div className="form-group">
+                        <label htmlFor="account">Account</label>
+                        <input type="text" id="account" className="form-control" name="account"/>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="password">Password</label>
+                        <input type="password" id="password" className="form-control" name="password"/>
+                    </div>
+
+                    <button type="submit" className="btn btn-success">Log in</button>
+                    <br/>
+                    <a href="/register" className="btn btn-success">Register</a>
                 </form>
-                <input type="text" onChange={this.handleChange.bind(this)}/><br/>
-                <div onClick={this.login.bind(this, this.state.status)} className="btn btn-primary">
-                    Click me
-                </div>
             </div>
         );
     }
