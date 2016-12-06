@@ -1,41 +1,33 @@
 import React from 'react';
 import { Link } from 'react-router';
-import styles from './../../styles/dashboard.css'
+import styles from './../../styles/dashboard.css';
+import InstanceRow from './InstanceRow'
 export default class Dashboard extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            data: []
+            data: [],
+            activeInstances: '',
+            numOfInstances: ''
+
         };
     }
 
     componentWillMount () {
-        /*fetch('http://services.groupkt.com/state/get/IND/all')
-                    .then((response) => {
-                        return response.json() })
-                            .then((json) => {
-                            console.log(JSON.stringify(json['RestResponse']['result'][0]));
-                                var d = json['RestResponse']['result'];
-                                var res = [];
-                                console.log('Length ' + d.length);
-                                for(var i = 0; i < d.length; i++) {
-                                    var row = d[i];
-                                    var keyVal =  i;
-                                    //console.log('Row value ' + row['name']);
-                                    res.push(<tr key={keyVal}><td>{row['name']}</td><td>{row['country']}</td><td>{row['area']}</td></tr>);
-                                }
-                                console.log(res[0]);
-                                this.setState({data: res});
-
-                            });
-                            */
-        fetch('http://localhost:8080/instance/list', {
-		'Access-Control-Allow-Origin': '*'
-	})
-            .then((response) => {
-                console.log(response);
-                return response;
+        fetch('http://localhost:8080/instance/list?user=sdthai')
+            .then((responses) => {
+                return responses.json()
+            })
+            .then((json) => {
+                var activeInstances =  json['data']['activeInstances'];
+                var numOfInstances =  json['data']['numOfInstances'];
+                var instances = json['data']['instances'];
+                var row = [];
+                instances.forEach(function(instance) {
+                    row.push(<InstanceRow instance={instance} key={instance.uuid}/>);
+                });
+                this.setState({activeInstances: activeInstances, numOfInstances: numOfInstances, data: row});
             });
     }
 
@@ -99,7 +91,7 @@ export default class Dashboard extends React.Component {
                                             <i className="fa fa-eye fa-5x"></i>
                                         </div>
                                         <div className="col-xs-9 text-right">
-                                            <div className="huge">5</div>
+                                            <div className="huge">{this.state.activeInstances}</div>
                                             <div>Active Instances</div>
                                         </div>
                                     </div>
@@ -114,7 +106,7 @@ export default class Dashboard extends React.Component {
                                            <i className="fa fa-eye-slash fa-5x"></i>
                                        </div>
                                        <div className="col-xs-9 text-right">
-                                           <div className="huge">8</div>
+                                           <div className="huge">{this.state.numOfInstances}</div>
                                            <div>All Instances</div>
                                        </div>
                                    </div>
@@ -174,26 +166,7 @@ export default class Dashboard extends React.Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr className="even gradeC">
-                                    <td>iOS #1</td>
-                                    <td>3 hours</td>
-                                    <td>$0.3</td>
-                                    <td className="center"><button type="button" className="btn btn-info btn-xs">Reserve</button>
-                                    <button type="button" className="btn btn-info btn-xs">Release</button>
-                                    <button type="button" className="btn btn-info btn-xs">Suspend</button>
-                                    <button type="button" className="btn btn-info btn-xs">Resume</button>
-                                    </td>
-                                </tr>
-                                <tr className="even gradeC">
-                                    <td>iOS #2</td>
-                                    <td>30 hours</td>
-                                    <td>$3</td>
-                                    <td className="center"><button type="button" className="btn btn-info btn-xs">Reserve</button>
-                                    <button type="button" className="btn btn-info btn-xs">Release</button>
-                                    <button type="button" className="btn btn-info btn-xs">Suspend</button>
-                                    <button type="button" className="btn btn-info btn-xs">Resume</button>
-                                    </td>
-                                </tr>
+                                {this.state.data}
                             </tbody>
                         </table>
                     </div>

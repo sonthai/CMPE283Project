@@ -20,7 +20,7 @@
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
 		<property name="url" value="jdbc:mysql://localhost:3306/cmpe283"/>
 		<property name="username" value="root"/>
-		<property name="password" value="phar4321"/>
+		<property name="password" value="1234"/>
 	</bean>
 
 	<!-- database initialization -->
@@ -39,4 +39,5 @@
 	</bean>
 
 	<bean id="instanceManagerServices" class="com.dashboard.services.InstanceManagerServices"/>
+	<bean id="openStackService" class="com.dashboard.services.OpenStackService"/>
 </beans>

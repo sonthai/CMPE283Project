@@ -36,13 +36,16 @@ public class InstanceDaoImpl implements InstanceDao{
         namedParameterJdbcTemplate.update(sql, map);
     }
 
-    public void releaseInstance(Map<String, Object> map) {
+   /* public void releaseInstance(Map<String, Object> map) {
+        map.put("status", "deleted");
+        map.put("dateRelease", new Date());
         QueryObject query = new QueryObject();
         query.setOperation("UPDATE");
         query.setTable("instance_manager");
 
         Set<String> fields = new HashSet<>();
         fields.add("status");
+        fields.add("dateReleased");
         List<String> values = Utils.constructQuery(fields, "=", false);
         query.setValues(values);
 
@@ -54,7 +57,7 @@ public class InstanceDaoImpl implements InstanceDao{
 
         String sql = query.getQuery();
         namedParameterJdbcTemplate.update(sql, map);
-    }
+    }*/
 
     @Override
     public List<Instance> getAllInstances(String userName) {
@@ -74,5 +77,29 @@ public class InstanceDaoImpl implements InstanceDao{
             instanceList = namedParameterJdbcTemplate.query(sql, new InstanceMapper());
         }
         return instanceList;
+    }
+
+    @Override
+    public void updateInstanceState(Map<String, Object> map) {
+        map.put("dateModified", new Date());
+        QueryObject query = new QueryObject();
+        query.setOperation("UPDATE");
+        query.setTable("instance_manager");
+
+        Set<String> fields = new HashSet<>();
+        fields.add("status");
+        fields.add("dateModified");
+        List<String> values = Utils.constructQuery(fields, "=", false);
+        query.setValues(values);
+
+        Set<String> whereClauses = new HashSet<>();
+        whereClauses.add("uuid");
+        whereClauses.add("userName");
+        String where = Utils.constructQuery(whereClauses, "=", true).get(0);
+        query.setWhereClause(where);
+
+        String sql = query.getQuery();
+        namedParameterJdbcTemplate.update(sql, map);
+
     }
 }

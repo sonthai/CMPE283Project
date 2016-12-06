@@ -16,7 +16,7 @@ const app = document.getElementById('app');
 
 ReactDOM.render(
     <Router history={browserHistory}>
-    	<Route path="/" component={Login} />
+    	<Route path="/" component={DashBoard} />
     	<Route path="error" component={Error}/>
     	<Route path="user" component={UserDashBoard}/>
     	<Route path="dashboard" component={DashBoard}/>

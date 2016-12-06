@@ -13,10 +13,12 @@ public class InstanceMapper implements RowMapper {
         instance.setUuid(rs.getInt("uuid"));
         instance.setUserName(rs.getString("userName"));
         instance.setImage(rs.getString("image"));
-        instance.setIsActive(rs.getInt("isActive"));
+        instance.setStatus(rs.getString("status"));
         instance.setDateCreated(rs.getDate("dateCreated"));;
-        instance.setDateReleased(rs.getDate("dateReleased"));
-        instance.setAppName(rs.getString("appName"));
+        if (rs.getDate("dateModified") != null) {
+            instance.setDateModified(rs.getDate("dateModified"));
+        }
+        instance.setProjectName(rs.getString("projectName"));
         instance.setMemory(rs.getInt("memory"));
         instance.setCpu(rs.getInt("cpu"));
         instance.setFlavor(rs.getString("flavor"));

@@ -10,12 +10,12 @@ public class Instance {
     private String userName;
     private String image;
     private String flavor;
-    private String appName;
+    private String projectName;
     private int memory;
     private int cpu;
-    private int isActive;
+    private String status;
     private Date dateCreated;
-    private Date dateReleased;
+    private Date dateModified;
 
     public String getUserName() {
         return userName;
@@ -34,13 +34,6 @@ public class Instance {
         this.dateCreated = dateCreated;
     }
 
-    public Date getDateReleased() {
-        return dateReleased;
-    }
-
-    public void setDateReleased(Date dateReleased) {
-        this.dateReleased = dateReleased;
-    }
 
     public int getUuid() {
         return uuid;
@@ -66,13 +59,7 @@ public class Instance {
         this.flavor = flavor;
     }
 
-    public String getAppName() {
-        return appName;
-    }
 
-    public void setAppName(String appName) {
-        this.appName = appName;
-    }
 
     public int getMemory() {
         return memory;
@@ -90,11 +77,28 @@ public class Instance {
         this.cpu = cpu;
     }
 
-    public int getIsActive() {
-        return isActive;
+    public String getStatus() {
+        return status;
     }
 
-    public void setIsActive(int isActive) {
-        this.isActive = isActive;
+    public void setStatus(String status) {
+        this.status = status;
     }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public Date getDateModified() {
+        return dateModified;
+    }
+
+    public void setDateModified(Date dateModified) {
+        this.dateModified = dateModified;
+    }
+
 }

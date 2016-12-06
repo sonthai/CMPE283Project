@@ -112,10 +112,10 @@ public class InstanceManagerController {
         log.info("Instance list API is called");
         ResponseMessage response = new ResponseMessage();
 
-        List<Instance> instances = instanceManagerServices.getInstanceList(userName);
-        Map<String, Object> data = new HashMap<>();
-        data.put("data", instances);
-        response.setData(data);
+        Map<String, Object> instanceData = instanceManagerServices.getInstanceData(userName);
+        //Map<String, Object> data = new HashMap<>();
+       // data.put("data", instanceData);
+        response.setData(instanceData);
         response.setErrorCode(0);
         response.setResponseMsg(null);
 
