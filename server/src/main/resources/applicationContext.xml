@@ -38,6 +38,10 @@
 		<property name="namedParameterJdbcTemplate" ref="namedParameterJdbcTemplate"/>
 	</bean>
 
+	<bean id="adminDao" class="com.dashboard.dao.AdminDaoImpl">
+		<property name="namedParameterJdbcTemplate" ref="namedParameterJdbcTemplate"/>
+	</bean>
+
 	<bean id="instanceManagerServices" class="com.dashboard.services.InstanceManagerServices"/>
-	<bean id="openStackService" class="com.dashboard.services.OpenStackService"/>
+	<bean id="adminServices" class="com.dashboard.services.AdminServices"/>
 </beans>

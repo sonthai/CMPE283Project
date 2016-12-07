@@ -9,7 +9,8 @@ export default class Dashboard extends React.Component {
         this.state = {
             data: [],
             activeInstances: '',
-            numOfInstances: ''
+            numOfInstances: '',
+            numOfHoursUsage: ''
 
         };
     }
@@ -23,11 +24,14 @@ export default class Dashboard extends React.Component {
                 var activeInstances =  json['data']['activeInstances'];
                 var numOfInstances =  json['data']['numOfInstances'];
                 var instances = json['data']['instances'];
+                var numOfHoursUsage = 0;
                 var row = [];
                 instances.forEach(function(instance) {
                     row.push(<InstanceRow instance={instance} key={instance.uuid}/>);
+                    numOfHoursUsage += instance.hourUsage;
                 });
-                this.setState({activeInstances: activeInstances, numOfInstances: numOfInstances, data: row});
+                this.setState({activeInstances: activeInstances, numOfInstances: numOfInstances,
+                                data: row, numOfHoursUsage: numOfHoursUsage});
             });
     }
 
@@ -76,8 +80,8 @@ export default class Dashboard extends React.Component {
                                             <i className="fa fa-tasks fa-5x"></i>
                                         </div>
                                         <div className="col-xs-9 text-right">
-                                            <div className="huge">140</div>
-                                            <div>Hours billed</div>
+                                            <div className="huge">{this.state.numOfHoursUsage}</div>
+                                            <div>Hours Usage</div>
                                         </div>
                                     </div>
                                  </div>
@@ -121,8 +125,8 @@ export default class Dashboard extends React.Component {
                                            <i className="fa fa-user fa-5x"></i>
                                        </div>
                                        <div className="col-xs-9 text-right">
-                                           <div className="huge">$153.03</div>
-                                           <div>Billed for December</div>
+                                           <div className="huge">$ 10</div>
+                                           <div>Beginner Plan</div>
                                        </div>
                                    </div>
                                </div>
@@ -161,7 +165,8 @@ export default class Dashboard extends React.Component {
                                 <tr>
                                     <th>Instance</th>
                                     <th>Usage</th>
-                                    <th>Cost</th>
+                                    <th>Status</th>
+                                    <th>Date Created</th>
                                     <th></th>
                                 </tr>
                             </thead>

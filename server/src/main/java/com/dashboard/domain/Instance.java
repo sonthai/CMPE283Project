@@ -1,11 +1,11 @@
 package com.dashboard.domain;
 
-
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.sql.Date;
-public class Instance {
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Instance {
     private int uuid;
     private String userName;
     private String image;
@@ -16,6 +16,7 @@ public class Instance {
     private String status;
     private Date dateCreated;
     private Date dateModified;
+    private int hourUsage;
 
     public String getUserName() {
         return userName;
@@ -101,4 +102,11 @@ public class Instance {
         this.dateModified = dateModified;
     }
 
+    public int getHourUsage() {
+        return hourUsage;
+    }
+
+    public void setHourUsage(int hourUsage) {
+        this.hourUsage = hourUsage;
+    }
 }

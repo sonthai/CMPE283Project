@@ -45,7 +45,7 @@ export default class Profile extends React.Component {
                              <div className="form-group">
                                 <label htmlFor="first-name" className="col-sm-2 col-sm-2 control-label">First Name</label>
                                 <div className="col-xs-4">
-                                    <input id="first" className="form-control" type="text" disable="true "value="Son" />
+                                    <input id="first" className="form-control" type="text" disable="true" />
                                 </div>
                              </div>
                              <div className="form-group">

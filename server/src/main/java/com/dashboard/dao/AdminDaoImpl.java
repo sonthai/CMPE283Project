@@ -3,6 +3,7 @@ package com.dashboard.dao;
 import com.dashboard.database.QueryObject;
 import com.dashboard.domain.*;
 import com.dashboard.utils.Utils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
@@ -14,7 +15,7 @@ import java.util.List;
  * Created by Kevin on 2016/12/3.
  */
 public class AdminDaoImpl implements AdminDao {
-
+    @Autowired
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public void setNamedParameterJdbcTemplate(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -81,7 +82,7 @@ public class AdminDaoImpl implements AdminDao {
                 final Billing b = new Billing();
                 b.setUsername(rs.getString("username"));
                 b.setBillurl(rs.getString("billurl"));
-                b.setDate(Utils.getDate(rs.getTimestamp("date")));
+                //b.setDate(Utils.getDate(rs.getTimestamp("date")));
                 return b;
             }
         });
